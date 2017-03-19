@@ -1,0 +1,30 @@
+---
+# Variables listed here are applicable to all host groups
+
+wp_version: 4.7.3
+wp_sha256sum: e715069fdab049ec668cd74e57cabcb23583dc4a84c5e330c430cbe8998f6d89
+
+# MySQL settings
+mysqlservice: mysqld
+mysql_port: 3306
+
+# These are the WordPress database settings
+wp_db_name: wordpress
+wp_db_user: wordpress
+
+# This is used for the nginx server configuration, but access to the
+# WordPress site is not restricted by a named host.
+nginx_port: 80
+nginx_ssl_port: 80
+server_protocol: http://
+server_hostname: www.mama-bear-naturals.com
+
+# Disable All Updates
+# By default automatic updates are enabled, set this value to true to disable all automatic updates
+auto_up_disable: false
+
+#Define Core Update Level
+# true  = Development, minor, and major updates are all enabled
+# false = Development, minor, and major updates are all disabled
+# minor = Minor updates are enabled, development, and major updates are disabled
+core_update_level: true
