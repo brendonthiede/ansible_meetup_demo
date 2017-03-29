@@ -2,12 +2,44 @@
 - name: Install nginx
   yum: name=nginx state=present
 
-- name: Copy nginx configuration for wordpress
-  template: src=default.conf.j2 dest=/etc/nginx/conf.d/default.conf
+- name: Install certbot
+  yum: name=certbot state=present
+
+#- name: Install certbot and generate cert
+#  command: "certbot certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} -d {{ server_hostname_beta }}"
+#  args:
+#    creates: "{{ certbot_output_dir }}"
+#
+#- name: Ensure a cron job to auto-renew the cert exists
+#  cron: name="daily auto renew cert"
+#        special_time=daily
+#        job="certbot renew --standalone --no-self-upgrade --pre-hook \"service nginx stop\" --post-hook \"service nginx start\" --quiet"
+#        state=present
+#  when: certbot_auto_renew
+
+- name: Copy nginx base configuration
+  template: src=nginx.conf.j2 dest=/etc/nginx.conf
+  notify: restart nginx
+
+- name: Generate strong Diffie-Hellman group
+  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+  args:
+    creates: "/etc/ssl/certs/dhparam.pem"
+
+- name: Copy nginx configuration for Live site
+  template: src=live.conf.nossl.j2 dest=/etc/nginx/conf.d/live.conf
+  notify: restart nginx
+
+- name: Copy nginx configuration for Beta site
+  template: src=beta.conf.nossl.j2 dest=/etc/nginx/conf.d/beta.conf
   notify: restart nginx
 
 - name: insert firewalld rule for nginx
   firewalld: port={{ nginx_port }}/tcp permanent=true state=enabled immediate=yes
+  ignore_errors: yes
+
+- name: insert firewalld rule for nginx with SSL
+  firewalld: port={{ nginx_ssl_port }}/tcp permanent=true state=enabled immediate=yes
   ignore_errors: yes
 
 - name: http service state

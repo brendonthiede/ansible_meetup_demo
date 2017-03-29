@@ -9,15 +9,20 @@ mysqlservice: mysqld
 mysql_port: 3306
 
 # These are the WordPress database settings
-wp_db_name: wordpress
+wp_db_name_live: wordpress_live
+wp_db_name_beta: wordpress_beta
 wp_db_user: wordpress
 
 # This is used for the nginx server configuration, but access to the
 # WordPress site is not restricted by a named host.
 nginx_port: 80
-nginx_ssl_port: 80
+nginx_ssl_port: 443
 server_protocol: http://
-server_hostname: www.mama-bear-naturals.com
+server_hostname_live: www.mama-bear-naturals.com
+server_hostname_beta: beta.mama-bear-naturals.com
+certbot_admin_email: brendon.thiede@gmail.com
+certbot_auto_renew: yes
+certbot_output_dir: "/etc/letsencrypt/live/{{ server_hostname_beta }}"
 
 # Disable All Updates
 # By default automatic updates are enabled, set this value to true to disable all automatic updates

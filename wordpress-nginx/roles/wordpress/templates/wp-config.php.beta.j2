@@ -15,12 +15,12 @@
  */
 
 /** Set the site's URL to use **/
-define('WP_HOME','{{ server_protocol }}{{ server_hostname }}');
-define('WP_SITEURL','{{ server_protocol }}{{ server_hostname }}');
+define('WP_HOME','{{ server_protocol }}{{ server_hostname_beta }}');
+define('WP_SITEURL','{{ server_protocol }}{{ server_hostname_beta }}');
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', '{{ wp_db_name }}');
+define('DB_NAME', '{{ wp_db_name_beta }}');
 
 /** MySQL database username */
 define('DB_USER', '{{ wp_db_user }}');
@@ -88,7 +88,7 @@ define( 'WP_AUTO_UPDATE_CORE', {{core_update_level}} );
 
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+    define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
