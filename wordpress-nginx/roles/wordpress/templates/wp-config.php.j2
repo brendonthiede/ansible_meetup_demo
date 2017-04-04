@@ -15,18 +15,18 @@
  */
 
 /** Set the site's URL to use **/
-define('WP_HOME','{{ server_protocol }}{{ server_hostname_beta }}');
-define('WP_SITEURL','{{ server_protocol }}{{ server_hostname_beta }}');
+define('WP_HOME','{{ nginx_protocol }}{{ item['nginx_hostname'] }}');
+define('WP_SITEURL','{{ nginx_protocol }}{{ item['nginx_hostname'] }}');
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', '{{ wp_db_name_beta }}');
+define('DB_NAME', '{{ item['wp_db_name'] }}');
 
 /** MySQL database username */
-define('DB_USER', '{{ wp_db_user }}');
+define('DB_USER', '{{ item['wp_db_user'] }}');
 
 /** MySQL database password */
-define('DB_PASSWORD', '{{ wp_db_password }}');
+define('DB_PASSWORD', '{{ item['wp_db_password'] }}');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
@@ -79,10 +79,10 @@ define('WPLANG', '');
 define('WP_DEBUG', false);
 
 /** Disable Automatic Updates Completely */
-define( 'AUTOMATIC_UPDATER_DISABLED', {{auto_up_disable}} );
+define( 'AUTOMATIC_UPDATER_DISABLED', {{ item['auto_update_disable'] }} );
 
 /** Define AUTOMATIC Updates for Components. */
-define( 'WP_AUTO_UPDATE_CORE', {{core_update_level}} );
+define( 'WP_AUTO_UPDATE_CORE', {{ item['core_update_level'] }} );
 
 /* That's all, stop editing! Happy blogging. */
 

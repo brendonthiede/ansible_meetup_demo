@@ -6,9 +6,10 @@
   yum: name=certbot state=present
 
 #- name: Install certbot and generate cert
-#  command: "certbot certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} -d {{ server_hostname_beta }}"
+#  command: "certbot certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} -d {{ item['nginx_hostname'] }}"
 #  args:
 #    creates: "{{ certbot_output_dir }}"
+#  with_items: "{{ sites }}"
 #
 #- name: Ensure a cron job to auto-renew the cert exists
 #  cron: name="daily auto renew cert"
@@ -27,19 +28,12 @@
     creates: "/etc/ssl/certs/dhparam.pem"
 
 - name: Copy nginx configuration for Live site
-  template: src=live.conf.nossl.j2 dest=/etc/nginx/conf.d/live.conf
+  template: src=site.conf.j2 dest=/etc/nginx/conf.d/{{ item['site_name'] }}.conf
   notify: restart nginx
-
-- name: Copy nginx configuration for Beta site
-  template: src=beta.conf.nossl.j2 dest=/etc/nginx/conf.d/beta.conf
-  notify: restart nginx
+  with_items: "{{ sites }}"
 
 - name: insert firewalld rule for nginx
   firewalld: port={{ nginx_port }}/tcp permanent=true state=enabled immediate=yes
-  ignore_errors: yes
-
-- name: insert firewalld rule for nginx with SSL
-  firewalld: port={{ nginx_ssl_port }}/tcp permanent=true state=enabled immediate=yes
   ignore_errors: yes
 
 - name: http service state

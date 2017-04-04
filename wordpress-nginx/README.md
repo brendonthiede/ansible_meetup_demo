@@ -32,7 +32,7 @@ To see what servers are in that group, run:
 
 To actually apply the playbook, run:
 
-    ansible-playbook site.yml -e@secrets.yml --vault-password-file=~/.vault_pass.txt
+    ansible-playbook site.yml -e@group_vars/vault --vault-password-file=~/.vault_pass.txt
 
 The playbooks will configure MariaDB, WordPress, Nginx, and PHP-FPM. When the run
 is complete, you can hit access server to begin the WordPress configuration.

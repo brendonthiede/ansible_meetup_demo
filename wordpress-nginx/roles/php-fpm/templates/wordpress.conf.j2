@@ -1,5 +1,5 @@
-[{{ server_hostname_live }}]
-listen = /var/run/php-fpm/{{ server_hostname_live }}.sock
+[{{ item['nginx_hostname'] }}]
+listen = /var/run/php-fpm/{{ item['nginx_hostname'] }}.sock
 listen.owner = nginx
 listen.group = nginx
 listen.mode = 0660
@@ -11,5 +11,5 @@ pm.start_servers = 1
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 pm.max_requests = 500
-chdir = /srv/{{ server_hostname_live }}/
-php_admin_value[open_basedir] = /srv/{{ server_hostname_live }}/:/tmp
+chdir = /srv/{{ item['nginx_hostname'] }}/
+php_admin_value[open_basedir] = /srv/{{ item['nginx_hostname'] }}/:/tmp

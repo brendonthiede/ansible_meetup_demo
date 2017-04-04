@@ -4,32 +4,45 @@
 wp_version: 4.7.3
 wp_sha256sum: e715069fdab049ec668cd74e57cabcb23583dc4a84c5e330c430cbe8998f6d89
 
-# MySQL settings
+# Generic MySQL settings
 mysqlservice: mysqld
 mysql_port: 3306
 
-# These are the WordPress database settings
-wp_db_name_live: wordpress_live
-wp_db_name_beta: wordpress_beta
-wp_db_user: wordpress
-
-# This is used for the nginx server configuration, but access to the
-# WordPress site is not restricted by a named host.
+# Generic nginx settings
 nginx_port: 80
-nginx_ssl_port: 443
-server_protocol: http://
-server_hostname_live: www.mama-bear-naturals.com
-server_hostname_beta: beta.mama-bear-naturals.com
-certbot_admin_email: brendon.thiede@gmail.com
-certbot_auto_renew: yes
-certbot_output_dir: "/etc/letsencrypt/live/{{ server_hostname_beta }}"
+nginx_protocol: http://
 
-# Disable All Updates
+#####################
+#                   #
+# Per Site Settings #
+#                   #
+#####################
+
+# auto_update_disable - Disable All Updates
 # By default automatic updates are enabled, set this value to true to disable all automatic updates
-auto_up_disable: false
 
-#Define Core Update Level
+# core_update_level - Define Core Update Level
 # true  = Development, minor, and major updates are all enabled
 # false = Development, minor, and major updates are all disabled
 # minor = Minor updates are enabled, development, and major updates are disabled
-core_update_level: true
+
+sites:
+    - site_name: live
+      nginx_hostname: www.mama-bear-naturals.com
+      wp_db_name: wordpress_live
+      wp_db_user: wordress_live
+      wp_db_password: "{{ vault_wp_db_password_live }}"
+      auto_update_disable: false
+      core_update_level: true
+    - site_name: beta
+      nginx_hostname: beta.mama-bear-naturals.com
+      wp_db_name: wordpress_beta
+      wp_db_user: wordress_beta
+      wp_db_password: "{{ vault_wp_db_password_beta }}"
+      auto_update_disable: false
+      core_update_level: true
+
+# TODO: once 443 traffic is enabled, set this up
+# certbot_admin_email: brendon.thiede@gmail.com # this should probably be global
+# certbot_auto_renew: yes # this should probably be global
+# certbot_output_dir: "/etc/letsencrypt/live/{{ server_hostname }}" # this needs to be per site

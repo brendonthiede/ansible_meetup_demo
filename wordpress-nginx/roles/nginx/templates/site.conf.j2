@@ -1,15 +1,14 @@
 server {
-    listen {{ nginx_port }} http2;
-    listen {{ nginx_port }};
-    listen {{ nginx_ssl_port }} http2 ssl;
+{% if nginx_protocol == 'https://' %}{% set extra_opts = ' http2 ssl' %}{% else %}{% set extra_opts = '' %}{% endif %}
+    listen {{ nginx_port }}{{ extra_opts }};
 
-    server_name  {{ server_hostname_beta }};
-    root /srv/{{ server_hostname_beta }}/ ;
+    server_name  {{ item['nginx_hostname'] }};
+    root /srv/{{ item['nginx_hostname'] }}/ ;
 
     client_max_body_size 64M;
 
-    ssl_certificate /etc/letsencrypt/live/{{ server_hostname_beta }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ server_hostname_beta }}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ item['nginx_hostname'] }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ item['nginx_hostname'] }}/privkey.pem;
 
     ########################################################################
     # from https://cipherli.st/                                            #
@@ -61,7 +60,7 @@ server {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         fastcgi_index index.php;
-        fastcgi_pass  unix:/var/run/php-fpm/{{ server_hostname_beta }}.sock;
+        fastcgi_pass  unix:/var/run/php-fpm/{{ item['nginx_hostname'] }}.sock;
         fastcgi_param   SCRIPT_FILENAME
                         $document_root$fastcgi_script_name;
         include       fastcgi_params;
