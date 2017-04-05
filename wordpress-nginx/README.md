@@ -19,7 +19,12 @@ WordPress blogging platform and CMS, frontend by the Nginx web server and the
 PHP-FPM process manager.
 
 Running the playbook will apply it to all servers marked as part of the `[wordpress-server]`
-group.  Inventory file path can be defined in `~/.ansible.cfg`.  Sample inventory contents:
+group.  Inventory file path can be defined in `~/.ansible.cfg`.  Sample config file:
+
+    [defaults]
+    inventory = ~/ansible/hosts
+
+Sample inventory contents:
 
     [wordpress-server]
     myvm ansible_user=root ansible_port=1234 ansible_host=12.34.56.7
@@ -49,11 +54,11 @@ home directory (this should _not_ be in source control).
 For adding secrets to the file, you can decrypt the file by
 running:
 
-    ansible-vault decrypt --vault-password-file=~/.vault_pass.txt secrets.yml
+    ansible-vault decrypt --vault-password-file=~/.vault_pass.txt group_vars/vault
 
 After modifying the file, re-encrypt it with:
 
-    ansible-vault encrypt --vault-password-file=~/.vault_pass.txt secrets.yml
+    ansible-vault encrypt --vault-password-file=~/.vault_pass.txt group_vars/vault
 
 Make sure not to commit the file while unencrypted.  More here: [http://docs.ansible.com/ansible/playbooks_vault.html]()
 
